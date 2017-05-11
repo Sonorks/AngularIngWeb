@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Primer ejemplo angular 1.6</title>
+</head>
+<script type="text/javascript" src="resources/js/angular.min.js">
+</script>
+<body ng-app> <!-- todo el body controlado por el ng-app -->
+<div>
+	<label>Ingrese su nombre:</label>
+	<input type="text" id="nombre" placeholder="Su nombre aqui" ng-model="nombre"/>
+</div>
+<div>
+	Nombre digitado: <div id="divNombre">{{nombre}}</div>
+</div>
+</body>
+</html>
