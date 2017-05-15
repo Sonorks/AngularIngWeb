@@ -14,13 +14,16 @@
 <div ng-controller="contCuestionario">
 	<div class="w3-container preguntas">
 			<div ng-repeat="pregunta in preguntas" class="pregunta">
-				<p class="estado-{{pregunta.estado}}">{{pregunta.texto}}</p>
+				<p id="pregunta{{pregunta.id}}" class="">{{pregunta.texto}}</p>
 				<div ng-repeat="respuesta in pregunta.respuestas">
 					<input type="radio" value="{{respuesta.id}}" name="pregunta{{pregunta.id}}"
 					id="respuesta{{pregunta.id}}{{respuesta.id}}" ng-model="pregunta.respuesta"
 					ng-change="validar(pregunta)"/>
 					<label for="respuesta{{pregunta.id}}{{respuesta.id}}">{{respuesta.texto}}</label>
 				</div>
+			</div>
+			<div>
+				<button id="botonCalificar" class="w3-btn w3-indigo" ng-click="calificar()">Calificar</button>
 			</div>
 	</div>
 	<div class="estadoUsuario {{estadoUsuario}}">

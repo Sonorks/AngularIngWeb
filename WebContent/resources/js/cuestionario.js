@@ -8,6 +8,7 @@ var cuestionario = angular.module('modCuestionario',[]);
 cuestionario.controller('contCuestionario', function($scope){
 	$scope.respuestasCorrectas = 0;
 	$scope.estadoUsuario = '';
+	$scope.respuestas = [];
 	$scope.preguntas = [{
 		id: 1,
 		texto: 'Pregunta 1',
@@ -67,19 +68,18 @@ cuestionario.controller('contCuestionario', function($scope){
 	}];
 	$scope.validar = function(pregunta) {
 		if(pregunta.respuestaValida == pregunta.respuesta){
-			$scope.respuestasCorrectas++;
 			pregunta.estado= 'ok';
 		}
 		else{
-			if(pregunta.estado === 'ok' && $scope.respuestasCorrectas > 0){
-				$scope.respuestasCorrectas--;
-			}
 			pregunta.estado = 'error'
 		}
-		estadoUsuario();
+		//estadoUsuario();
 	}
 	function estadoUsuario(){
-		var total = $scope.respuestasCorrectas/$scope.preguntas;
+		var total = $scope.respuestasCorrectas/$scope.preguntas.length;
+		console.log("Respuestas correctas: "+ $scope.respuestasCorrectas);
+		console.log("Preguntas totales: "+ $scope.preguntas.length);
+		console.log(total);
 		if (total === 0){
 			$scope.estadoUsuario = 'looser';
 		}
@@ -89,5 +89,18 @@ cuestionario.controller('contCuestionario', function($scope){
 		else{
 			$scope.estadoUsuario = 'poor';
 		}
+	}
+	$scope.calificar = function(){
+		angular.forEach($scope.preguntas, function(pregunta){
+			if(pregunta.estado === 'ok'){
+				$scope.respuestasCorrectas++;
+				document.getElementById("pregunta"+pregunta.id).className ="estado-ok";
+			}
+			else{
+				document.getElementById("pregunta"+pregunta.id).className ="estado-error";
+			}
+		});
+		document.getElementById("botonCalificar").disabled = true;
+		estadoUsuario();
 	}
 });
