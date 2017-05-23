@@ -1,0 +1,15 @@
+<div>
+	<table class="w3-table w3-hover" border="1" width="100%">
+		<tr>
+			<th>Identificacion</th>
+			<th>Nombre completo</th>
+			<th>Correo Electrónico</th>
+		</tr>
+		<tr ng-repeat="cliente in listaClientes">
+			<td>{{cliente.cedula}}</td>
+			<td>{{cliente.nombres}} {{cliente.apellidos}}</td>
+			<td>{{cliente.correo}}</td>
+		</tr>
+		<button ng-click="agregar()">Agregar</button>
+	</table>
+</div>
