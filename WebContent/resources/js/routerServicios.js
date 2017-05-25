@@ -2,7 +2,7 @@
  * 
  */
 
-var appClientes = angular.module('clientes',['ngRoute']);
+var appClientes = angular.module('clientes',['ngRoute','ngCookies']);
 
 appClientes.service('clientesService',function($http){
 	this.listaClientes = function(){
@@ -28,7 +28,7 @@ appClientes.service('guardarCliente', function($http){
 		});
 	}
 });
-appClientes.service('loginService', function($http){
+appClientes.service('loginService', function($http, $cookies, $location){
 	this.logear = function(usuario, contrasena){
 		return $http({
 			url: 'http://localhost:8081/ejemploJersey/sonorks/usuario',
@@ -39,9 +39,19 @@ appClientes.service('loginService', function($http){
 			}
 		});
 	}
+	this.validarEstado = function(){
+		if(typeof($cookies.usuario) == 'undefined' ||
+				$cookies.usuario == ""){
+			alert("Alo polizia");
+			$location.url("/");
+			return false;
+		}
+	}
 });
 
-appClientes.controller('listaClientes', function($scope, $location,clientesService){
+appClientes.controller('listaClientes', function($scope, $location,clientesService, loginService){
+	estado = loginService.validarEstado();
+	if(estado == false){ return }
 	clientesService.listaClientes().then(
 			function success(data){
 				$scope.listaClientes = data.data.clienteJersey;
@@ -68,13 +78,20 @@ appClientes.controller("cliente", function($scope, $location, guardarCliente){
 	}
 });
 
-appClientes.controller("login", function($scope, $location, loginService){
+appClientes.controller("login", function($scope, $location, $cookies, loginService){
 	$scope.usuario = '';
 	$scope.contrasena = '';
 	$scope.logear = function(){
 		loginService.logear($scope.usuario, $scope.contrasena).then(
 				function success(data){
-					alert('Logeado satisfactoriamente');
+					if(data.data != ''){
+						$scope.usuario = '';
+						$scope.contrasena = '';
+						alert(data.data + " FAIL");
+						return;
+					}
+					alert(data.data + " FUERA");
+					$cookies.usuario = $scope.usuario;
 					$location.url('/listaClientes');
 				});
 	}
@@ -94,3 +111,9 @@ appClientes.config(['$routeProvider', function($routeProvider){
 		controller: 'login'
 	})
 }])
+
+appCliente.run($rootScope, loginService){
+	$rootScope.$on('$rootChangeStart', function(){
+		loginService.validarEstado();
+	})
+}
