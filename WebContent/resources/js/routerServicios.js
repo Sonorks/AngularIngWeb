@@ -42,7 +42,6 @@ appClientes.service('loginService', function($http, $cookies, $location){
 	this.validarEstado = function(){
 		if(typeof($cookies.usuario) == 'undefined' ||
 				$cookies.usuario == ""){
-			alert("Alo polizia");
 			$location.url("/");
 			return false;
 		}
@@ -87,10 +86,9 @@ appClientes.controller("login", function($scope, $location, $cookies, loginServi
 					if(data.data != ''){
 						$scope.usuario = '';
 						$scope.contrasena = '';
-						alert(data.data + " FAIL");
+						alert(data.data);
 						return;
 					}
-					alert(data.data + " FUERA");
 					$cookies.usuario = $scope.usuario;
 					$location.url('/listaClientes');
 				});
@@ -112,7 +110,7 @@ appClientes.config(['$routeProvider', function($routeProvider){
 	})
 }])
 
-appClientes.run(function($rootScope, loginService){
+appClientes.run(function($rootScope, $location, loginService){
 	$rootScope.$on('$routeChangeStart', function(){
 		console.log("disparado el root change start");
 		loginService.validarEstado();
