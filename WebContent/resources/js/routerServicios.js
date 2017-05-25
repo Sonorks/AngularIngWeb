@@ -112,8 +112,9 @@ appClientes.config(['$routeProvider', function($routeProvider){
 	})
 }])
 
-appCliente.run($rootScope, loginService){
-	$rootScope.$on('$rootChangeStart', function(){
+appClientes.run(function($rootScope, loginService){
+	$rootScope.$on('$routeChangeStart', function(){
+		console.log("disparado el root change start");
 		loginService.validarEstado();
 	})
-}
+});
